@@ -2,6 +2,7 @@ package forecast
 
 import "time"
 
+// TODO: should be moved elsewhere and be an actual geo point
 type LatLong struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
