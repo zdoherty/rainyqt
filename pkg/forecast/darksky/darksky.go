@@ -3,10 +3,9 @@ package darksky
 import (
 	"time"
 
-	"github.com/zdoherty/rainyqt/pkg/forecast"
-
 	"github.com/shawntoffel/darksky"
 	"github.com/zdoherty/rainyqt/pkg/config"
+	"github.com/zdoherty/rainyqt/pkg/forecast"
 )
 
 var (

@@ -5,10 +5,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/zdoherty/rainyqt/pkg/forecast/darksky"
-
 	"github.com/urfave/cli"
 	"github.com/zdoherty/rainyqt/pkg/forecast"
+	"github.com/zdoherty/rainyqt/pkg/forecast/darksky"
 )
 
 var (
