@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"os"
 	"strconv"
 
@@ -17,7 +16,7 @@ var (
 		Name:      "forecast",
 		Aliases:   []string{"fc"},
 		Usage:     "fetches the forecast for a location",
-		ArgsUsage: "latitude longitude",
+		ArgsUsage: "<lat> <lng>",
 		Category:  "forecasting",
 		Action:    forecastHandler,
 		Flags: []cli.Flag{
@@ -39,26 +38,29 @@ var (
 
 func forecastHandler(c *cli.Context) error {
 	// parse latlong from args
+	if c.NArg() != 2 {
+		return cli.NewExitError("forecast needs two arguments: lat, lng", 64)
+	}
 	lat, err := strconv.ParseFloat(c.Args().Get(0), 64)
 	if err != nil {
-		return err
+		return cli.NewExitError("error parsing lat: "+err.Error(), 65)
 	}
 	lng, err := strconv.ParseFloat(c.Args().Get(1), 64)
 	if err != nil {
-		return err
+		return cli.NewExitError("error parsing lng: "+err.Error(), 65)
 	}
 	location := forecast.NewLatLong(lat, lng)
 
 	// setup forecast client based on provider
 	var forecaster forecast.Forecaster
-	switch c.String("provider") {
+	switch provider := c.String("provider"); provider {
 	case "darksky":
-		if c.String("darksky-key") != "" {
-			Config.APIKey = c.String("darksky-key")
+		if key := c.String("darksky-key"); key != "" {
+			Config.APIKey = key
 		}
 		forecaster = darksky.NewClientFromConfig(Config)
 	default:
-		return errors.New("unknown forecast provider: " + c.String("provider"))
+		return cli.NewExitError("unsupported provider: "+provider, 78)
 	}
 
 	// dump forecast to stdout
