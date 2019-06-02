@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	APIKey string `yaml:"darksky-api-key"`
+	APIKey   string `yaml:"darksky-api-key"`
+	LogLevel string `yaml:"log-level"`
 }
 
 func NewConfigFromFile(filename string) (Config, error) {
@@ -30,7 +31,8 @@ func NewConfigFromFile(filename string) (Config, error) {
 
 func NewConfigFromDefaults() Config {
 	c := Config{
-		APIKey: "",
+		APIKey:   "",
+		LogLevel: "INFO",
 	}
 	return c
 }
