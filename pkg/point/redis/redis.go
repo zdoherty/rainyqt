@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	DistanceUnits = map[point.DistanceUnit]string{
+	distanceUnits = map[point.DistanceUnit]string{
 		point.Miles:      "mi",
 		point.Meters:     "m",
 		point.Kilometers: "km",
@@ -57,9 +57,9 @@ func (ps PointStore) GetByName(name string) (point.Point, error) {
 }
 
 func (ps PointStore) GetByRadius(p point.Point, radius point.Distance) ([]point.Point, error) {
-	q := redis.GeoRadiusQuery{
+	q := &redis.GeoRadiusQuery{
 		Radius:    float64(radius.N),
-		Unit:      DistanceUnits[radius.Unit],
+		Unit:      distanceUnits[radius.Unit],
 		WithCoord: true,
 	}
 	set, err := ps.Client.GeoRadius(ps.GeoSetName, p.Point.Lng(), p.Point.Lat(), q).Result()
