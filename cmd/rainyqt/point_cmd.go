@@ -114,12 +114,12 @@ func pointGetRadiusHandler(c *cli.Context) error {
 	var p point.Point
 	switch nargs := c.NArg(); nargs {
 	case 3:
-		p, err := point.ParsePoint("", c.Args()[1], c.Args()[2])
+		p, err = point.ParsePoint("", c.Args()[1], c.Args()[2])
 		if err != nil {
 			return cli.NewExitError("couldn't parse point from lat lng args: "+err.Error(), 1)
 		}
 	case 2:
-		p, err := pointStore.GetByName(c.Args()[1])
+		p, err = pointStore.GetByName(c.Args()[1])
 		if err != nil {
 			return cli.NewExitError("couldn't get point by name: "+err.Error(), 1)
 		}

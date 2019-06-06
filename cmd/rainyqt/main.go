@@ -26,18 +26,18 @@ func parseConfig(c *cli.Context) error {
 
 	path := c.GlobalString("config")
 	if path == "" {
-		return nil
+		Config = config.NewConfigFromDefaults()
+	} else {
+		conf, err := config.NewConfigFromFile(path)
+		if err != nil {
+			return err
+		}
+		Config = conf
 	}
-
-	conf, err := config.NewConfigFromFile(path)
-	if err != nil {
-		return err
-	}
-	Config = conf
 
 	// check cli log level again, fall back to config file level if unset
 	if cliLevel := c.GlobalString("log-level"); cliLevel == "" {
-		lvl, err := log.ParseLevel(conf.LogLevel)
+		lvl, err := log.ParseLevel(Config.LogLevel)
 		if err != nil {
 			return err
 		}
