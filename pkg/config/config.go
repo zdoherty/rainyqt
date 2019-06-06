@@ -59,10 +59,10 @@ func NewConfigFromDefaults() Config {
 		},
 		PointStore: PointStoreConfig{
 			Redis: RedisPointStoreConfig{
-				Prefix:   "POINT_",
-				Addr:     "localhost:6379",
-				Password: "",
-				DB:       0,
+				GeoSetName: "RAINYQT_POINTS",
+				Addr:       "localhost:6379",
+				Password:   "",
+				DB:         0,
 			},
 		},
 	}

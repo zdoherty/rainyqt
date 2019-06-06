@@ -70,7 +70,7 @@ func ParsePoint(name string, lat string, lng string) (Point, error) {
 	if err != nil {
 		return p, err
 	}
-	p = NewPoint("", latFloat, lngFloat)
+	p = NewPoint(name, latFloat, lngFloat)
 	return p, nil
 }
 
