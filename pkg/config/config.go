@@ -7,9 +7,29 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type RedisPointStoreConfig struct {
+	GeoSetName string `yaml:"geo-set-name"`
+	Addr       string `yaml:"addr"`
+	Password   string `yaml:"password"`
+	DB         int    `yaml:"db"`
+}
+
+type PointStoreConfig struct {
+	Redis RedisPointStoreConfig `yaml:"redis"`
+}
+
+type DarkSkyForecasterConfig struct {
+	APIKey string `yaml:"api-key"`
+}
+
+type ForecasterConfig struct {
+	DarkSky DarkSkyForecasterConfig `yaml:"darksky"`
+}
+
 type Config struct {
-	APIKey   string `yaml:"darksky-api-key"`
-	LogLevel string `yaml:"log-level"`
+	LogLevel   string           `yaml:"log-level"`
+	Forecaster ForecasterConfig `yaml:"forecaster"`
+	PointStore PointStoreConfig `yaml:"point-store"`
 }
 
 func NewConfigFromFile(filename string) (Config, error) {
@@ -31,8 +51,20 @@ func NewConfigFromFile(filename string) (Config, error) {
 
 func NewConfigFromDefaults() Config {
 	c := Config{
-		APIKey:   "",
 		LogLevel: "INFO",
+		Forecaster: ForecasterConfig{
+			DarkSky: DarkSkyForecasterConfig{
+				APIKey: "",
+			},
+		},
+		PointStore: PointStoreConfig{
+			Redis: RedisPointStoreConfig{
+				Prefix:   "POINT_",
+				Addr:     "localhost:6379",
+				Password: "",
+				DB:       0,
+			},
+		},
 	}
 	return c
 }
