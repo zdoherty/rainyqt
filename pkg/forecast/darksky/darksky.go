@@ -3,6 +3,8 @@ package darksky
 import (
 	"time"
 
+	"github.com/zdoherty/rainyqt/pkg/point"
+
 	"github.com/shawntoffel/darksky"
 	"github.com/zdoherty/rainyqt/pkg/config"
 	"github.com/zdoherty/rainyqt/pkg/forecast"
@@ -22,20 +24,20 @@ type Client struct {
 
 func NewClientFromConfig(c config.Config) forecast.Forecaster {
 	cli := Client{
-		Client: darksky.New(c.APIKey),
+		Client: darksky.New(c.Forecaster.DarkSky.APIKey),
 	}
 	return cli
 }
 
-func (c Client) Get(location forecast.LatLong) (forecast.Forecast, error) {
+func (c Client) Get(p point.Point) (forecast.Forecast, error) {
 	f := forecast.Forecast{
-		Location: location,
+		Location: p,
 		Fetched:  time.Now(),
 	}
 
 	resp, err := c.Client.Forecast(darksky.ForecastRequest{
-		Latitude:  darksky.Measurement(location.Latitude),
-		Longitude: darksky.Measurement(location.Longitude),
+		Latitude:  darksky.Measurement(p.Lat()),
+		Longitude: darksky.Measurement(p.Lng()),
 		Options: darksky.ForecastRequestOptions{
 			Exclude: "minutely,weekly",
 		},

@@ -1,19 +1,10 @@
 package forecast
 
-import "time"
+import (
+	"time"
 
-// TODO: should be moved elsewhere and be an actual geo point
-type LatLong struct {
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-}
-
-func NewLatLong(lat float64, lng float64) LatLong {
-	return LatLong{
-		Latitude:  lat,
-		Longitude: lng,
-	}
-}
+	"github.com/zdoherty/rainyqt/pkg/point"
+)
 
 type RainData struct {
 	Type        RainType `json:"type"`
@@ -58,10 +49,10 @@ type DailyForecast struct {
 type Forecast struct {
 	Hourly   []HourlyForecast `json:"hourly"`
 	Daily    []DailyForecast  `json:"daily"`
-	Location LatLong          `json:"location"`
+	Location point.Point      `json:"location"`
 	Fetched  time.Time        `json:"fetched"`
 }
 
 type Forecaster interface {
-	Get(location LatLong) (Forecast, error)
+	Get(p point.Point) (Forecast, error)
 }
