@@ -3,11 +3,11 @@ package main
 import (
 	"encoding/json"
 	"os"
-	"strconv"
 
 	"github.com/urfave/cli"
 	"github.com/zdoherty/rainyqt/pkg/forecast"
 	"github.com/zdoherty/rainyqt/pkg/forecast/darksky"
+	"github.com/zdoherty/rainyqt/pkg/point"
 )
 
 var (
@@ -40,22 +40,14 @@ func forecastHandler(c *cli.Context) error {
 	if c.NArg() != 2 {
 		return cli.NewExitError("forecast needs two arguments: lat, lng", 64)
 	}
-	lat, err := strconv.ParseFloat(c.Args().Get(0), 64)
-	if err != nil {
-		return cli.NewExitError("error parsing lat: "+err.Error(), 65)
-	}
-	lng, err := strconv.ParseFloat(c.Args().Get(1), 64)
-	if err != nil {
-		return cli.NewExitError("error parsing lng: "+err.Error(), 65)
-	}
-	location := forecast.NewLatLong(lat, lng)
+	p, err := point.ParsePoint("", c.Args()[0], c.Args()[1])
 
 	// setup forecast client based on provider
 	var forecaster forecast.Forecaster
 	switch provider := c.String("provider"); provider {
 	case "darksky":
 		if key := c.String("darksky-key"); key != "" {
-			Config.APIKey = key
+			Config.Forecaster.DarkSky.APIKey = key
 		}
 		forecaster = darksky.NewClientFromConfig(Config)
 	default:
@@ -63,7 +55,7 @@ func forecastHandler(c *cli.Context) error {
 	}
 
 	// dump forecast to stdout
-	fc, err := forecaster.Get(location)
+	fc, err := forecaster.Get(p)
 	if err != nil {
 		return err
 	}

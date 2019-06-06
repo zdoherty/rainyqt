@@ -80,6 +80,7 @@ func main() {
 
 	app.Commands = []cli.Command{
 		forecastCmd,
+		pointCmd,
 	}
 
 	err := app.Run(os.Args)
