@@ -1,0 +1,28 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "time": {
+        "type": "date"
+      },
+      "temp": {
+        "type": "double"
+      },
+      "rain": {
+        "type": "double"
+      },
+      "snow": {
+        "type": "double"
+      },
+      "sleet": {
+        "type": "double"
+      },
+      "wind": {
+        "type": "double"
+      }
+    }
+  }
+}
